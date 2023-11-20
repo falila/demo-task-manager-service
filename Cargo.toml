@@ -1,0 +1,10 @@
+[package]
+name = "demo-task-manager-service"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+actix-rt = "2.9.0"
+actix-web = "4.4.0"
+serde = { version = "1.0.192", features = ["derive"] }
