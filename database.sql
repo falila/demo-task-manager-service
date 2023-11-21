@@ -3,13 +3,13 @@ drop table if exists task_item;
 
 CREATE TABLE task_list (
 	id serial PRIMARY KEY,
-	title VARCHAR ( 255 ) UNIQUE NOT NULL
+	title VARCHAR ( 255 ) NOT NULL
 );
 
 
 CREATE TABLE task_item (
 	id serial PRIMARY KEY,
-	title  VARCHAR ( 255 ) UNIQUE NOT NULL,
+	title  VARCHAR ( 255 ) NOT NULL,
 	checked BOOLEAN NOT NULL DEFAULT FALSE,
     list_id INTEGER NOT NULL,
     FOREIGN KEY (list_id) REFERENCES task_list(id)

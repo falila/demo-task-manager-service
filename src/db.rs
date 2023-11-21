@@ -6,7 +6,7 @@ use tokio_pg_mapper::FromTokioPostgresRow;
 
 pub async fn get_tasks(client: &Client) -> Result<Vec<TaskList>, io::Error> {
     let query_statement = client
-        .prepare("SELECT * FROM task_list order by id desc")
+        .prepare("SELECT * FROM task_list order by id desc limit 20")
         .await
         .unwrap();
     let tasks = client
