@@ -1,16 +1,36 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
-use std::io;
+mod config;
 mod models;
-use crate::models::Status;
+mod handlers;
+mod db;
+use crate::config::Config;
+use crate::handlers::*;
+use actix_web::{web, App, HttpServer};
+use deadpool_postgres::Runtime;
+use dotenv::dotenv;
+use std::io;
+use tokio_postgres::NoTls;
+use actix_web::web::Data;
 
-async fn status() -> impl Responder {
-    HttpResponse::Ok().json(Status { status: "OK".to_string() })
-}
+
+
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    print!("Server running at http://127.0.0.1:8080");
-    HttpServer::new(|| App::new().route("/", web::get().to(status)))
-        .bind("127.0.0.1:8080")?
+    dotenv().ok();
+    let config = Config::from_env().unwrap();
+    let pool = config.pg.create_pool(Some(Runtime::Tokio1), NoTls).unwrap();
+    
+    //let host = std::env::var("SERVER.HOST").expect("SERVER.HOST must be set.");
+    //let port = std::env::var("SERVER.PORT").expect("SERVER.PORT must be set.");
+    print!(
+        "Server running at http://{}:{}/",
+        config.server.host, config.server.port
+    );
+    HttpServer::new(move ||{App::new()
+        .app_data(Data::new(pool.clone()))
+        .route("/", web::get().to(status))
+        .route("/tasks", web::get().to(get_tasks))
+        })
+        .bind(format!("{}:{}", config.server.host, config.server.port))?
         .run()
         .await
 }
