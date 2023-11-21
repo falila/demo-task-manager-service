@@ -29,6 +29,9 @@ async fn main() -> io::Result<()> {
         .app_data(Data::new(pool.clone()))
         .route("/", web::get().to(status))
         .route("/tasks", web::get().to(get_tasks))
+        .route("/tasks", web::post().to(create_task))
+        .route("/tasks/{list_id}/items", web::get().to(get_items))
+        .route("/tasks/{list_id}/items/{item_id}", web::put().to(mark_item))
         })
         .bind(format!("{}:{}", config.server.host, config.server.port))?
         .run()
