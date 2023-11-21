@@ -86,3 +86,8 @@ curl -X PUT -H "Content-Type: application/json" -d '{"title": "Updated Task", "d
 curl -X DELETE http://localhost:8000/tasks/{task_id}
 ```
 
+### Benchmark Task
+
+```bash
+ab -p task.json -T application/json -n 100000 -k -c 30 -q http://127.0.0.1:8080/tasks
+```
