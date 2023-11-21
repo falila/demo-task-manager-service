@@ -77,13 +77,7 @@ curl http://localhost:8000/tasks/{task_id}
 ### Update Task
 
 ```bash
-curl -X PUT -H "Content-Type: application/json" -d '{"title": "Updated Task", "description": "This task has been updated."}' http://localhost:8000/tasks/{task_id}
-```
-
-### Delete Task
-
-```bash
-curl -X DELETE http://localhost:8000/tasks/{task_id}
+curl -X PUT -H "Content-Type: application/json" -d '{"title": "Updated Task"}' http://localhost:8000/tasks/tasks/{task_id}/items/{item_id}
 ```
 
 ### Benchmark Task
