@@ -19,7 +19,7 @@ pub struct AppErrorResponse {
 }
 
 impl AppError {
-    fn message(&self) -> String {
+    pub fn message(&self) -> String {
         match &*self {
             AppError {
                 message: Some(message),

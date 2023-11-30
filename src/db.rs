@@ -11,7 +11,7 @@ pub async fn get_tasks(client: &Client) -> Result<Vec<TaskList>, AppError> {
     let tasks = client
         .query(&query_statement, &[])
         .await
-        .expect("Error executing query statement")
+        .map_err(AppError::db_error)?
         .iter()
         .map(|row| TaskList::from_row_ref(row).unwrap())
         .collect::<Vec<TaskList>>();
@@ -26,7 +26,7 @@ pub async fn get_task_items(client: &Client, list_id: i32) -> Result<Vec<TaskIte
     let items = client
         .query(&query_statement, &[&list_id])
         .await
-        .expect("Error executing query statement")
+        .map_err(AppError::db_error)?
         .iter()
         .map(|row| TaskItem::from_row_ref(row).unwrap())
         .collect::<Vec<TaskItem>>();
@@ -41,7 +41,7 @@ pub async fn create_task(client: &Client, title: String) -> Result<TaskList, App
     client
         .query(&statement, &[&title])
         .await
-        .expect("Error while creating task")
+        .map_err(AppError::db_error)?
         .iter()
         .map(|row| TaskList::from_row_ref(row).unwrap())
         .collect::<Vec<TaskList>>()
@@ -61,7 +61,7 @@ pub async fn mark_item(client: &Client, list_id: i32, item_id: i32) -> Result<bo
     let result = client
         .execute(&query_statement, &[&list_id, &item_id])
         .await
-        .expect("Error executing query statement");
+        .map_err(AppError::db_error)?;
     match result {
         ref update_value if *update_value == 1 => Ok(true),
         _ => Ok(false),

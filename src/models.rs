@@ -1,3 +1,5 @@
+use deadpool_postgres::Pool;
+use slog::Logger;
 use serde::{Deserialize, Serialize};
 use tokio_pg_mapper_derive::PostgresMapper;
 
@@ -29,4 +31,9 @@ pub struct CreateTaskList {
 #[derive(Serialize, Deserialize)]
 pub struct ResultResponse {
     pub success: bool,
+}
+
+pub struct AppState {
+    pub pool: Pool,
+    pub log: Logger
 }
